@@ -13,10 +13,8 @@ ready_to_send_response=s.recv(1024)
 print("Server: {}".format(ready_to_send_response))
 
 l = f.read(1024)
-print
 while (l):
     print 'Sending...'
-    print l
     s.send(l)
     l = f.read(1024)
 f.close()
