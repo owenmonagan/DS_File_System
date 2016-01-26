@@ -3,7 +3,7 @@ import socket
 import random
 
 host="0.0.0.0"
-port= 6165
+port= 6146
 
 if os.name != "nt":
     import fcntl
