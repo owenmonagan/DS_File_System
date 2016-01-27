@@ -1,6 +1,6 @@
 import logging
 
-password_database=[]
+password_database=[("owen","0123456789abcde1")]
 
 def add_user(user_id, password):
     password_database.append((user_id,password))
@@ -8,4 +8,4 @@ def add_user(user_id, password):
 
 def find_user_password(user_id):
     tuple=[item for item in password_database if item[0]==user_id]
-    return tuple[1]
+    return tuple[0][1]
