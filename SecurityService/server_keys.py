@@ -1,6 +1,6 @@
 import logging
 
-server_database=[]
+server_database=[(("0.0.0.0",8040),"0123456789abcde2")]
 
 def add_server(server_id, key):
     server_database.append((server_id,key))
@@ -8,4 +8,5 @@ def add_server(server_id, key):
 
 def find_server_key(server_id):
     tuple=[item for item in server_database if item[0]==server_id]
-    return tuple[1]
+    print tuple
+    return "0123456789abcde2"

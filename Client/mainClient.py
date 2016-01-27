@@ -23,6 +23,9 @@ if __name__ == "__main__":
     s.send(login_message)
     Authentication_server_reply=s.recv(1024)
     print Authentication_server_reply
+    decrypted_reply=decrypt_func("0123456789abcde1",Authentication_server_reply)
+    print decrypted_reply
+    
 
 
 
