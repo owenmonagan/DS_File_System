@@ -1,0 +1,25 @@
+client first requests access from the authentication server.
+    creating a log in request msg, encrypiting it with the key derieved from the password provided by the user. P1
+    pass this w/ the user id to AS
+    Using stored user password (P1) to decrypt the msg and verifies content to establish Authentication
+    Maybe user name password tuples can be stored on the AS
+
+
+AS responds w/ token
+    Token: ticket, a session key, ID of the server for who the ticket is for, timeout period
+        Ticket: session key
+    session key is a key generated at random - encrypts and dycrypts comm between client and server
+    ticket is encrypted with a server encryption key which is only known by the AS and the target server
+    Token is encrypted with key from client password P1
+
+Client to send msg to server
+    use session key to encrypt all msg's
+    also sends ticket (without encrypting it) --- ticket + encrypted message
+
+server rec req
+    dycripts ticket to obtain session key
+        then decrypts the msg with the session key
+        performs reqyest
+        generates response & encrypts the response with the session key
+
+Client dycripts response with session key
