@@ -2,8 +2,8 @@ import os
 import socket
 import random
 
-host="0.0.0.0"
-port= 6146
+file_host="0.0.0.0"
+file_port= 6147
 
 if os.name != "nt":
     import fcntl

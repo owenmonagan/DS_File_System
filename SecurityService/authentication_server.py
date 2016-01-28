@@ -10,7 +10,7 @@ from encrypt_decrypt import decrypt_func,encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
 from server_keys import add_server, find_server_key
-host, port= "0.0.0.0", 5160
+host, port= "0.0.0.0", 4040
 
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
@@ -30,11 +30,12 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
 
         self.session_key=str(session_key)
         print self.session_key
-        self.server_encryption_key=find_server_key((serverinfo[0],serverinfo[1]))
 
-        self.ticket=prepare_ticket(self.session_key, self.server_encryption_key)
+        self.server_encryption_key=find_server_key((serverinfo[0],int(serverinfo[1])))
+        #create ticket
+        self.ticket=prepare_ticket(self.server_encryption_key, self.session_key)
 
-
+        #Sending Token
         self.token= prepare_token(self.ticket,session_key,(serverinfo[0],serverinfo[1]))
         self.encryipted_token=encrypt_func(self.password,self.token)
         self.request.send(self.encryipted_token)

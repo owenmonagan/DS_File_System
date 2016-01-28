@@ -8,5 +8,5 @@ def add_server(server_id, key):
 
 def find_server_key(server_id):
     tuple=[item for item in server_database if item[0]==server_id]
-    print tuple
-    return "0123456789abcde2"
+    print tuple[0][1]
+    return tuple[0][1]
