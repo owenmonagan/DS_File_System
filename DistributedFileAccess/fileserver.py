@@ -42,6 +42,9 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
             authenticated_requst = ("HELO {}\nIP:{}\nPort:{}\nStudentID:{}\n".format(lines[1], my_ip, p, studentNumber))
             self.request.send(authenticated_requst)
 
+        elif("Expired Ticket"):
+            self.request("Your can not be completed, your ticket has expired")
+
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     pass

@@ -10,7 +10,7 @@ from encrypt_decrypt import decrypt_func,encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
 from server_keys import add_server, find_server_key
-host, port= "0.0.0.0", 4040
+host, port= "0.0.0.0", 4940
 
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):

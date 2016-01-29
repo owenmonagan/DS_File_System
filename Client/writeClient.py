@@ -5,7 +5,7 @@ s = socket.socket()         # Create a socket object
 #port = 12345                 # Reserve a port for your service.
 
 s.connect((host, port))
-file_name='dog.jpg'
+file_name='beer.jpg'
 s.send("WRITE\n{}\n".format(file_name)) #sned write request
 f = open(file_name,'rb')
 

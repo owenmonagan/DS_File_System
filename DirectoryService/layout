@@ -1,0 +1,26 @@
+User req to open file via client
+by contacting dercetory
+
+then DS
+    find server holding file
+    find name of that file on the server
+
+DS
+    maps directories to server:directory Indetifies
+        Directory does not remap actual file names
+
+Generally more files than directories
+/path/directory/file.txt
+
+
+Find file local
+
+
+file_upload
+file_removal
+generate Id (file_name, file_server)
+
+
+
+/server/directory/file
+/server/file
