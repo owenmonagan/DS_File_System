@@ -8,7 +8,8 @@ import socket
 from DistributedFileAccess.server_address_info import get_lan_ip, file_host, file_port
 from DistributedFileAccess.write_file_to_server import write_file
 from DistributedFileAccess.read_file_from_server import read_file
-from authenticateFileRequest import authenticate
+from SecurityService.server_authenticator import authenticate
+file_server_key="0123456789abcde2"
 
 studentNumber = "8225096d25e2f49ea3efabe515fd9f58707934a0cb3a9494aea8d64ec363cd17"
 
@@ -19,7 +20,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
         self.return_string= ""
 
     def handle(self):
-        authenticated_requst=authenticate(self.request.recv(1024))
+        authenticated_requst=authenticate(file_server_key,self.request.recv(1024))
         print(authenticated_requst)
         #request_string = self.request.recv(1024)
         if ("KILL_SERVICE" in authenticated_requst):

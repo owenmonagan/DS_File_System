@@ -1,8 +1,7 @@
 from SecurityService.encrypt_decrypt import decrypt_func
 from datetime import datetime
-server_key="0123456789abcde2"
 
-def authenticate(request_message):
+def authenticate(server_key,request_message):
     lines=request_message.split("\n")
     ticket=lines[0]
     encrypted_message=lines[1]

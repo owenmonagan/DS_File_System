@@ -1,6 +1,9 @@
 import logging
+from DirectoryService.Directory_server import directory_server_key, directory_host,directory_port
+from DistributedFileAccess.fileserver import file_server_key, file_host,file_port
 
-server_database=[(("0.0.0.0",8040),"0123456789abcde2")]
+
+server_database=[((file_host,file_port),file_server_key),((directory_host,directory_port),directory_server_key)]
 
 def add_server(server_id, key):
     server_database.append((server_id,key))
@@ -8,5 +11,5 @@ def add_server(server_id, key):
 
 def find_server_key(server_id):
     tuple=[item for item in server_database if item[0]==server_id]
-    print tuple[0][1]
+    print tuple
     return tuple[0][1]
