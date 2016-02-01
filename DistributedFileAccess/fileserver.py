@@ -9,6 +9,7 @@ from read_file_from_server import read_file
 from SecurityService.server_authenticator import authenticate
 from primary_copy import propagate_write, ping_primary_copy, parse_string_server_list, parse_tuple_server_list
 from datetime import datetime
+from election import 
 file_server_key="0123456789abcde2"
 
 studentNumber = "8225096d25e2f49ea3efabe515fd9f58707934a0cb3a9494aea8d64ec363cd17"
@@ -95,11 +96,16 @@ if __name__ == "__main__":
     file_server.primary_copy=False
     file_server.last_replica=0
     file_server.server_list=[]
+
+    #each replica must know the primary address
     file_server.primary_copy_address=(None,None)
+
+    #server id is used in the bully election algorithm
     file_server.server_id= random.randint(1,100)
 
     #aims to ensure that pings are distributed within a minute: doesnt overload the primary copy
     file_server.ping_interval=random.randint(1,59)
+
     print(serverIP)
     print(serverPort)
     file_server.server_alive=True
