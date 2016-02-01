@@ -1,0 +1,36 @@
+Master slave model:
+all replication servers are aware of other servers
+
+Primiary copy acts as sync
+    All writes go to primary copy
+    reads can also go to primary copy
+
+slaves
+    provide read service
+
+
+Election Algrorithm,
+    bully
+    largest id becomes the primary copy
+    at failure to connect to primary copy
+    the server sends a election message to each replication server
+        if a server has a higher ID it replies with an election message
+        then sends another election message
+
+        else if no server replies then server becomes the primary copy
+            and then sends out an elected message
+
+
+
+primary copy
+    accepts all requests
+        if read forward
+        else write and forward update
+
+
+replication server
+    accepts uploads from primary copy
+    on read request queries
+
+
+

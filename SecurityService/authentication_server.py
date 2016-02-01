@@ -4,12 +4,11 @@ import random
 import threading
 import logging
 from parse_request import parse_message
-from password_store import add_user, find_user_password
+from key_store import find_key, add_server, find_server_key, add
 from DistributedFileAccess.server_address_info import get_lan_ip
-from encrypt_decrypt import decrypt_func,encrypt_func
+from encrypt_decrypt import decrypt_func, encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
-from server_keys import add_server, find_server_key
 auth_host, auth_port= "0.0.0.0", 9998
 
 
@@ -18,13 +17,13 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         #log_in_request form #####\nUserID
         self.log_in_request = self.request.recv(1024)
-        #seperating the user id from the encrypted message
-        self.encyripted_message, self.user_id = parse_message(self.log_in_request)
-        #finding the users password from the database
-        self.password=find_user_password(self.user_id)
-        print self.password
+        #seperating the id from the encrypted message
+        self.encyripted_message, self.id = parse_message(self.log_in_request)
+        #finding the requests key from the database
+        self.key=find_key(self.id)
+        print self.key
         #Decrypting message
-        self.message= decrypt_func(self.password, self.encyripted_message)
+        self.message= decrypt_func(self.key, self.encyripted_message)
         print self.message
         serverinfo=self.message.split("\n")
 
@@ -37,7 +36,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
 
         #Sending Token
         self.token= prepare_token(self.ticket,session_key,(serverinfo[0],serverinfo[1]))
-        self.encryipted_token=encrypt_func(self.password,self.token)
+        self.encryipted_token=encrypt_func(self.key,self.token)
         self.request.send(self.encryipted_token)
 
         #prepare token

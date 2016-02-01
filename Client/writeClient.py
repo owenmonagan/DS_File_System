@@ -1,5 +1,5 @@
 import socket               # Import socket module
-from DistributedFileAccess.server_address_info import host, port
+from DistributedFileAccess.server_address_info import file_host, file_port
 s = socket.socket()         # Create a socket object
 #host = socket.gethostname() # Get local machine name
 #port = 12345                 # Reserve a port for your service.
