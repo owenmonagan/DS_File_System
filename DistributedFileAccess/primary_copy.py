@@ -1,6 +1,6 @@
 #accepts all request
 #also talks to other slaves
-from Client.logon_to_AS import logon, generate_request
+from logon_to_AS import logon, generate_request
 import logging
 import socket
 

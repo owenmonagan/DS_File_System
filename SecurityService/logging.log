@@ -825,3 +825,6 @@ INFO:root:Encrypted: 8631700827479080
 INFO:root:Encrypted: ã…pÛ!^Şˆl|vèÍ¥jxCª¸Ñä¶a×R`~L{O”ø­Î•\
 8631700827479080
 ('0.0.0.0', '6666')
+INFO:root:Encrypted message from server has been parsed
+INFO:root:Decrypted: 0.0.0.0
+7070

@@ -1,5 +1,5 @@
 from parse_strings import parse_add
-from DistributedFileAccess.fileserver import file_host, file_port
+#from DistributedFileAccess.fileserver import file_host, file_port
 
 def add_file(directory, request, file_location):
     file_name= parse_add(request)

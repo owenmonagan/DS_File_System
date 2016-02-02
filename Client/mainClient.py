@@ -1,8 +1,8 @@
 import socket               # Import socket module
-from SecurityService.authentication_server import auth_host, auth_port
-from DistributedFileAccess.server_address_info import file_host, file_port
-from SecurityService.encrypt_decrypt import encrypt_func, decrypt_func
-from DirectoryService.Directory_server import directory_host,directory_port
+#from SecurityService.authentication_server import auth_host, auth_port
+#from DistributedFileAccess.server_address_info import file_host, file_port
+from authentication import encrypt_func, decrypt_func
+#from DirectoryService.Directory_server import directory_host,directory_port
 
 #host = socket.gethostname() # Get local machine name
 #port = 12345                 # Reserve a port for your service.
@@ -11,7 +11,9 @@ from DirectoryService.Directory_server import directory_host,directory_port
 #ENCYRPITED
     #SERVERIP
     #SERVERPORT
-
+primary_port=4300
+auth_host, auth_port= "0.0.0.0", primary_port+4
+directory_host,directory_port = "0.0.0.0", primary_port+5
 #login in to directory server via AS
 
 

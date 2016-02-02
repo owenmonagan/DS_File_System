@@ -1,8 +1,10 @@
 import logging
-from DirectoryService.Directory_server import directory_server_key, directory_host,directory_port
-from DistributedFileAccess.fileserver import file_server_key, file_host,file_port
+#from DirectoryService.Directory_server import directory_server_key, directory_host,directory_port
+#from DistributedFileAccess.fileserver import file_server_key, file_host,file_port
 
-server_database=[((file_host,file_port),file_server_key),((directory_host,directory_port),directory_server_key)]
+host="0.0.0.0"
+port=4300
+server_database=[((host,port+1),"0123456789ab{}".format(port+1)),((host,port+5),"0123456789ab{}".format(port+5))]
 password_database=[("owen","0123456789abcde1")]
 
 def add_key(id, password):
@@ -16,10 +18,6 @@ def find_key(id):
     else:
         #Return a key that replicas and the primary copy use to interact
         return "012345678replica"
-
-
-
-
 
 def add_server(server_id, key):
     server_database.append((server_id,key))
