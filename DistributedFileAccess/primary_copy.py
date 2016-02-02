@@ -1,8 +1,9 @@
 #accepts all request
 #also talks to other slaves
-from Client.mainClient import logon,generate_request
+from Client.logon_to_AS import logon, generate_request
 import logging
 import socket
+
 
 def propagate_write(list_of_servers, file_name):
     write_message="WRITE\n{}\n".format(file_name)

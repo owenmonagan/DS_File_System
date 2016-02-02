@@ -1,4 +1,4 @@
-from Client.mainClient import logon, generate_request
+from primary_copy import logon,generate_request
 import socket
 
 def election(server_id, list_of_servers, host, port):
@@ -19,6 +19,7 @@ def election(server_id, list_of_servers, host, port):
                 highest_id=False
         except:
             pass
+
     if(is_highest_id==True):
         elected(host, port)
         return host,port

@@ -1,15 +1,17 @@
 import SocketServer
 import logging
+import sys
 import random
 import threading
 import logging
 from parse_request import parse_message
-from key_store import find_key, add_server, find_server_key, add
+from key_store import find_key, find_server_key
 from DistributedFileAccess.server_address_info import get_lan_ip
 from encrypt_decrypt import decrypt_func, encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
-auth_host, auth_port= "0.0.0.0", 9998
+#auth_host, auth_port= "0.0.0.0", 9998
+auth_host, auth_port= sys.argv[0], sys.argv[1]
 
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):

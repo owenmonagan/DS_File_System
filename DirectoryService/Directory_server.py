@@ -1,12 +1,14 @@
 import SocketServer
 import threading
 import logging
+import sys
 from DistributedFileAccess.server_address_info import get_lan_ip
 from add_file_to_directory import add_file, find_suitable_server
 from find_file_in_directory import find_file
 from SecurityService.server_authenticator import authenticate
 
-directory_host, directory_port= "0.0.0.0", 6666
+#directory_host, directory_port= "0.0.0.0", 6666
+directory_host, directory_port= sys.argv[0], sys.argv[1]
 directory_server_key="0123456789abcde3"
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):

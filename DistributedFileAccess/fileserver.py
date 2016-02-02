@@ -1,15 +1,17 @@
 import SocketServer
 import logging
+import sys
 import threading
 import logging
 import random
-from server_address_info import get_lan_ip, file_host, file_port
+from server_address_info import get_lan_ip #file_host, file_port
 from write_file_to_server import write_file
 from read_file_from_server import read_file
 from SecurityService.server_authenticator import authenticate
-from primary_copy import propagate_write, ping_primary_copy, parse_string_server_list, parse_tuple_server_list
+from primary_copy import propagate_write, ping_primary_copy, parse_tuple_server_list
 from datetime import datetime
-from election import 
+from election import election, parse_elected
+file_host, file_port=sys.argv[0], sys.argv[1]
 file_server_key="0123456789abcde2"
 
 studentNumber = "8225096d25e2f49ea3efabe515fd9f58707934a0cb3a9494aea8d64ec363cd17"
@@ -73,12 +75,18 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
                 self.request.send(None)
 
 
-        elif("ELECTION"):
-            pass
+        elif("ELECTION" in authenticated_requst):
+            #checks if the id in the message is larger then mine
+            if(int(authenticated_requst.split("\n")[1])>file_server.server_id):
+                self.request.send("\n")
+            else:
+                self.request.send("Whoa, I have a bigger Id, I'm a bully")
 
 
-        elif("ELECTED"):
-            pass
+        elif("ELECTED" in authenticated_requst):
+            file_server.primary_copy=parse_elected(authenticated_requst)
+
+
 
 class ThreadedTCPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     pass
@@ -121,7 +129,7 @@ if __name__ == "__main__":
                 ping_reply=ping_primary_copy()
                 #if ping fails hold an election
                 if(ping_reply==None):
-                    #start_election
+                    election(file_server.server_id,file_server.server_list,file_host, file_port)
                     pass
                 else:
                     file_server.server_list=ping_reply
