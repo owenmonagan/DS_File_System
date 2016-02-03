@@ -31,7 +31,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
             #request in form ADD\nfile_location\nfile_name
             server_address=find_file(directory_server.directory_of_files,authenticated_request)
             if(server_address==None):
-                server_address= find_suitable_server()
+                server_address= find_suitable_server(int(sys.argv[2]))
             directory_server.directory_of_files=add_file(directory_server.directory_of_files,authenticated_request,server_address)
             formated_server_address="{}\n{}".format(server_address[0],server_address[1])
             print formated_server_address

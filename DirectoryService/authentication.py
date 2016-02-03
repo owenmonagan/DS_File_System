@@ -19,13 +19,17 @@ def authenticate(server_key,request_message):
         return "Expired Ticket"
 
 def encrypt_func(key, message):
+    print "CLIENT: ABOUT TO ENCRYPT:{}".format(key)
     obj = AES.new(key, AES.MODE_CFB, 'This is an IV456')
     ciphertext=obj.encrypt(message)
+    print "CLIENT: ENCRYPTED:{}".format(message)
     logging.info("Encrypted: {}".format(message))
     return ciphertext
 
 def decrypt_func(key, encrypted_message):
+    print "CLIENT: ABOUT TO DECRYPT:{}".format(key)
     obj= AES.new(key, AES.MODE_CFB, 'This is an IV456')
     message=obj.decrypt(encrypted_message)
+    print "CLIENT: DECRYPTED:{}".format(message)
     logging.info("Decrypted: {}".format(message))
     return message

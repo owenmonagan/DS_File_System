@@ -5,7 +5,7 @@ import random
 import threading
 import logging
 from parse_request import parse_message
-from key_store import find_key, find_server_key
+from key_store import find_key, find_server_key, add_server
 #from DistributedFileAccess.server_address_info import get_lan_ip
 from encrypt_decrypt import decrypt_func, encrypt_func
 from session_key_generator import session_key
@@ -23,16 +23,16 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
         self.encyripted_message, self.id = parse_message(self.log_in_request)
         #finding the requests key from the database
         self.key=find_key(self.id)
-        print self.key
+        #print self.key
         #Decrypting message
         self.message= decrypt_func(self.key, self.encyripted_message)
-        print self.message
+        #print self.message
         serverinfo=self.message.split("\n")
 
         self.session_key=str(session_key)
-        print self.session_key
+        #print self.session_key
 
-        self.server_encryption_key=find_server_key((serverinfo[0],int(serverinfo[1])))
+        self.server_encryption_key=find_server_key((serverinfo[0],int(serverinfo[1])),authentication_server.server_database)
         #create ticket
         self.ticket=prepare_ticket(self.server_encryption_key, self.session_key)
 
@@ -57,7 +57,12 @@ if __name__ == "__main__":
     #h, p = my_ip, int(sys.argv[1])
     authentication_server = ThreadedTCPServer((auth_host, auth_port), ThreadedTCPHandler)
     serverIP, serverPort = authentication_server.server_address  # find out what port we were given
+    authentication_server.server_database=[]
 
+    for file_servers_index in range(-10,10):
+        server_id= (auth_host, auth_port+file_servers_index)
+        key="0123456789ab{}".format(auth_port+file_servers_index)
+        authentication_server.server_database= add_server(server_id, key,authentication_server.server_database)
     #print(serverIP)
     #print(serverPort)
     authentication_server.server_alive=True

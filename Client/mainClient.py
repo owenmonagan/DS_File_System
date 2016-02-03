@@ -3,7 +3,7 @@ import socket               # Import socket module
 #from DistributedFileAccess.server_address_info import file_host, file_port
 from authentication import encrypt_func, decrypt_func
 #from DirectoryService.Directory_server import directory_host,directory_port
-
+import sys
 #host = socket.gethostname() # Get local machine name
 #port = 12345                 # Reserve a port for your service.
 
@@ -11,7 +11,7 @@ from authentication import encrypt_func, decrypt_func
 #ENCYRPITED
     #SERVERIP
     #SERVERPORT
-primary_port=4300
+primary_port=int(sys.argv[1])
 auth_host, auth_port= "0.0.0.0", primary_port+4
 directory_host,directory_port = "0.0.0.0", primary_port+5
 #login in to directory server via AS
