@@ -6,7 +6,10 @@ python SecurityService/authentication_server.py "0.0.0.0" $(($1+4)) &
 
 python DirectoryService/Directory_server.py "0.0.0.0" $(($1+5)) &
 
+
+#sleep 5
+
 python DistributedFileAccess/fileserver.py True $1 "0.0.0.0" $1 &
 python DistributedFileAccess/fileserver.py False $1 "0.0.0.0" $(($1+1)) &
-python DistributedFileAccess/fileserver.py False $1 "0.0.0.0" $(($1+2)) &
-python DistributedFileAccess/fileserver.py False $1 "0.0.0.0" $(($1+3)) &
+#python DistributedFileAccess/fileserver.py False $1 "0.0.0.0" $(($1+2)) &
+#python DistributedFileAccess/fileserver.py False $1 "0.0.0.0" $(($1+3)) &
