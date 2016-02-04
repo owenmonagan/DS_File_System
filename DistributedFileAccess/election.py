@@ -1,13 +1,13 @@
 from primary_copy import logon,generate_request
 import socket
 
-def election(server_id, list_of_servers, host, port):
+def election(server_id, list_of_servers, host, port,auth_port):
 
     election_message="ELECTION\n{}".format(server_id)
     is_highest_id=True
 
     for server in list_of_servers:
-        ticket, session_key= logon("server",server[0],server[1],"012345678replica")
+        ticket, session_key= logon("server",server[0],server[1],"012345678replica", auth_port)
         election_request=generate_request(ticket,session_key,election_message)
         #server_file_location=get_server_file_location_from_directory(write_request)
         try:

@@ -4,7 +4,6 @@ from logon_to_AS import logon, generate_request
 import logging
 import socket
 
-
 def propagate_write(list_of_servers, file_name):
     write_message="WRITE\n{}\n".format(file_name)
     failed_servers=[]
@@ -33,9 +32,9 @@ def propagate_write(list_of_servers, file_name):
             failed_servers.append(server)
     return failed_servers
 
-def ping_primary_copy(primary_address):
+def ping_primary_copy(primary_address, auth_port,port):
     ping_message="PING"
-    ticket, session_key= logon("server",primary_address[0],primary_address[1],"012345678replica")
+    ticket, session_key= logon("server",primary_address[0],primary_address[1],"012345678replica", auth_port)
     ping_request=generate_request(ticket,session_key,ping_message)
     try:
         s=socket.socket()
