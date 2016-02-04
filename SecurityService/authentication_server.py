@@ -11,8 +11,10 @@ from encrypt_decrypt import decrypt_func, encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
 #auth_host, auth_port= "0.0.0.0", 9998
+import datetime
 auth_host, auth_port= sys.argv[1], int(sys.argv[2])
-
+directory_host, directory_port= sys.argv[1], int(sys.argv[3])
+file_host, file_port= sys.argv[1], int(sys.argv[4])
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
 
@@ -28,7 +30,8 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
         self.message= decrypt_func(self.key, self.encyripted_message)
         #print self.message
         serverinfo=self.message.split("\n")
-
+        print int(serverinfo[1])
+        print authentication_server.server_database
         self.session_key=str(session_key)
         #print self.session_key
 
@@ -59,21 +62,33 @@ if __name__ == "__main__":
     serverIP, serverPort = authentication_server.server_address  # find out what port we were given
     authentication_server.server_database=[]
 
+    key="0123456789ab{}".format(directory_port)
+    authentication_server.server_database= add_server((directory_host,directory_port), key,authentication_server.server_database)
+
+    key="0123456789ab{}".format(file_port)
+    authentication_server.server_database= add_server((file_host,file_port), key,authentication_server.server_database)
+
+
+    #this is for replication
+    #Assums that replication servers are within a few ports range of the primary file server.....
     for file_servers_index in range(-10,10):
-        server_id= (auth_host, auth_port+file_servers_index)
-        key="0123456789ab{}".format(auth_port+file_servers_index)
+        server_id= (file_host, file_port+file_servers_index)
+        key="0123456789ab{}".format(file_port+file_servers_index)
         authentication_server.server_database= add_server(server_id, key,authentication_server.server_database)
     #print(serverIP)
     #print(serverPort)
     authentication_server.server_alive=True
     #add_user("owen",1234)
     #add_user("jam",4321)
+    current_min=datetime.datetime.now().minute
     try:
         server_thread = threading.Thread(target=authentication_server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
 
-        while(authentication_server.server_alive==True):
+
+        #servertimes out after 10 minutes
+        while(authentication_server.server_alive==True and current_min>datetime.datetime.now().minute-10):
             pass
 
         authentication_server.shutdown()

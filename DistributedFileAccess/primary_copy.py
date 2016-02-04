@@ -4,6 +4,41 @@ from logon_to_AS import logon, generate_request
 import logging
 import socket
 
+def propagate_write_2(list_of_servers, file_name, auth_port):
+    write_message="WRITE\n{}\n".format(file_name)
+    failed_servers=[]
+    for server in list_of_servers:
+        ticket, session_key= logon("server",server[0],server[1],"012345678replica", auth_port)
+        write_request=generate_request(ticket,session_key,write_message)
+        #server_file_location=get_server_file_location_from_directory(write_request)
+        #server_file_location=server_file_location.split("\n")
+        #print server_file_location
+        #print "server_file_location_above"
+        try:
+            s= socket.socket()
+            s.connect(server[0],server[1])
+            file = open('{}'.format(file_name),'w')
+            logging.info("File opened and beginning download")
+            ready_to_send_response=s.recv(1024)
+            print("Server: {}".format(ready_to_send_response))
+            l = file.read(1024)
+            while (l):
+                print 'Sending...'
+                s.send(l)
+                l = file.read(1024)
+                file.close()
+            print "Done Sending"
+            s.request.send("{} has been successfully uploaded".format(file_name))
+            logging.info("Writing File Complete")
+        except:
+            failed_servers.append(server)
+    return failed_servers
+
+
+
+
+
+
 def propagate_write(list_of_servers, file_name):
     write_message="WRITE\n{}\n".format(file_name)
     failed_servers=[]
