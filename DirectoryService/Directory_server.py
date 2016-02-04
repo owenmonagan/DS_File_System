@@ -9,7 +9,8 @@ from authentication import authenticate
 import datetime
 #directory_host, directory_port= "0.0.0.0", 6666
 directory_host, directory_port= sys.argv[1], int(sys.argv[2])
-
+auth_host, auth_port= sys.argv[1], int(sys.argv[3])
+primary_file_host, primary_file_port= sys.argv[1], int(sys.argv[4])
 directory_server_key="0123456789ab{}".format(directory_port)
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
@@ -18,6 +19,8 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
 
         request = self.request.recv(1024)
         authenticated_request=authenticate(directory_server_key, request)
+        #If its a read request the server returns the location of the file
+        #Location is server address. This could be easly expanded upon.
         if("READ" in authenticated_request):
             server_address=find_file(directory_server.directory_of_files,authenticated_request)
             if(not server_address == None):
@@ -25,13 +28,16 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
                 print formated_server_address
                 self.request.send(formated_server_address)
             else:
+                #no file in the server
                 self.request.send("File Does Not Exist")
 
+        #Checks if the file exists. If it doesnt It finds a suitable file_server else return the file server location
+        #
         elif("WRITE" in authenticated_request):
             #request in form ADD\nfile_location\nfile_name
             server_address=find_file(directory_server.directory_of_files,authenticated_request)
             if(server_address==None):
-                server_address= find_suitable_server(int(sys.argv[2]))
+                server_address= find_suitable_server(primary_file_port)
             directory_server.directory_of_files=add_file(directory_server.directory_of_files,authenticated_request,server_address)
             formated_server_address="{}\n{}".format(server_address[0],server_address[1])
             print formated_server_address
@@ -61,8 +67,8 @@ if __name__ == "__main__":
         server_thread = threading.Thread(target=directory_server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
-
-        while(directory_server.server_alive==True and current_min>(datetime.datetime.now().minute-2)):
+        #shut down after 10 minutes
+        while(directory_server.server_alive==True and current_min>(datetime.datetime.now().minute-10)):
             pass
 
         directory_server.shutdown()

@@ -14,9 +14,9 @@ def add_file(directory, request, file_location):
     return directory
 
 
-def find_suitable_server(directory_port):
+def find_suitable_server(file_port):
     #returns the primary copies address
-    return ("0.0.0.0", directory_port-5)
+    return ("0.0.0.0", file_port)
 
 
 #cycles through the servers selecting the new server to upload a file too

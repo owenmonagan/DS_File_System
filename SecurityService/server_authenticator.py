@@ -1,4 +1,4 @@
-from SecurityService.encrypt_decrypt import decrypt_func
+from encrypt_decrypt import decrypt_func
 from datetime import datetime
 
 def authenticate(server_key,request_message):

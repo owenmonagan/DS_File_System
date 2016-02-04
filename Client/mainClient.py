@@ -11,9 +11,9 @@ import sys
 #ENCYRPITED
     #SERVERIP
     #SERVERPORT
-primary_port=int(sys.argv[1])
-auth_host, auth_port= "0.0.0.0", primary_port+4
-directory_host,directory_port = "0.0.0.0", primary_port+5
+primary_host, primary_port=sys.argv[1], int(sys.argv[2])
+auth_host, auth_port= sys.argv[1], int(sys.argv[3])
+directory_host,directory_port = sys.argv[1], int(sys.argv[4])
 #login in to directory server via AS
 
 
@@ -87,13 +87,12 @@ def read_file_from_server(read_message, file_name):
 def write_file_to_server(write_message, file_name):
     #connect to directory server to find file location on the server
     ticket, session_key= logon("owen",directory_host,directory_port,"0123456789abcde1")
-    print "session"
+    print "session_key_below"
     print session_key
-    print "seseion key done"
     write_request=generate_request(ticket,session_key,write_message)
     server_file_location=get_server_file_location_from_directory(write_request)
     server_file_location=server_file_location.split("\n")
-    #print server_file_location
+    print server_file_location
     #print "server_file_location_above"
     file_ticket, file_session_key= logon("owen",server_file_location[0],int(server_file_location[1]),"0123456789abcde1")
     upload_request=generate_request(file_ticket,file_session_key,write_message)
