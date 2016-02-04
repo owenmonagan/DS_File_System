@@ -6,7 +6,7 @@ import sys
 from add_file_to_directory import add_file, find_suitable_server
 from find_file_in_directory import find_file
 from authentication import authenticate
-
+import datetime
 #directory_host, directory_port= "0.0.0.0", 6666
 directory_host, directory_port= sys.argv[1], int(sys.argv[2])
 
@@ -56,12 +56,13 @@ if __name__ == "__main__":
     directory_server.server_alive=True
     #print(serverIP)
     #print(serverPort)
+    current_min=datetime.datetime.now().minute
     try:
         server_thread = threading.Thread(target=directory_server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
 
-        while(directory_server.server_alive==True):
+        while(directory_server.server_alive==True and current_min>(datetime.datetime.now().minute-2)):
             pass
 
         directory_server.shutdown()

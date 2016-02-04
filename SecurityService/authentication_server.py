@@ -11,6 +11,7 @@ from encrypt_decrypt import decrypt_func, encrypt_func
 from session_key_generator import session_key
 from token_creator import prepare_token, prepare_ticket
 #auth_host, auth_port= "0.0.0.0", 9998
+import datetime
 auth_host, auth_port= sys.argv[1], int(sys.argv[2])
 
 
@@ -68,12 +69,13 @@ if __name__ == "__main__":
     authentication_server.server_alive=True
     #add_user("owen",1234)
     #add_user("jam",4321)
+    current_min=datetime.datetime.now().minute
     try:
         server_thread = threading.Thread(target=authentication_server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
 
-        while(authentication_server.server_alive==True):
+        while(authentication_server.server_alive==True and current_min>datetime.datetime.now().minute-2):
             pass
 
         authentication_server.shutdown()

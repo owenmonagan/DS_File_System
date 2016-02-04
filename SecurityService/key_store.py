@@ -32,5 +32,5 @@ def find_server_key(server_id,server_database):
     #print server_database
     #print "\n\n"
     tuple=[item for item in server_database if item[0]==server_id]
-    print tuple
+    #print tuple
     return tuple[0][1]

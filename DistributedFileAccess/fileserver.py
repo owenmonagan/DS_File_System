@@ -8,18 +8,19 @@ import random
 from write_file_to_server import write_file
 from read_file_from_server import read_file
 from authentication import authenticate
-from primary_copy import propagate_write, ping_primary_copy, parse_tuple_server_list
+from primary_copy import propagate_write, ping_primary_copy, parse_tuple_server_list, propagate_write_2
 from datetime import datetime
 from election import election, parse_elected
 file_host, file_port=sys.argv[3], int(sys.argv[4])
 auth_host, auth_port="0.0.0.0" , int(sys.argv[5])
-file_server_key="012345678replica" #"0123456789ab{}".format(file_port)
-
+file_server_key= "0123456789ab{}".format(file_port)
+#"012345678replica"
 studentNumber = "8225096d25e2f49ea3efabe515fd9f58707934a0cb3a9494aea8d64ec363cd17"
 
 class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
     def handle(self):
         authenticated_requst=authenticate(file_server_key,self.request.recv(1024))
+        print "FS {}: AuthenticatedReply below".format(file_port)
         print(authenticated_requst)
 
 
@@ -44,7 +45,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
             #the replica server list
             if(file_server.primary_copy==True):
                 file_name=authenticated_requst.split("\n")[1]
-                failed_servers=propagate_write(file_server.server_list,file_name )
+                failed_servers=propagate_write_2(file_server.server_list,file_name, auth_port)
                 file_server.server_list.remove(failed_servers)
 
 
@@ -58,7 +59,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
                 else:
                     file_server.last_replica+=1
             else:
-                print(authenticated_requst)
+                #print(authenticated_requst)
                 read_file(self, authenticated_requst)
 
         elif("Expired Ticket"):
@@ -66,7 +67,7 @@ class ThreadedTCPHandler(SocketServer.BaseRequestHandler):
 
 
         elif("PING" in authenticated_requst):
-            print "FS {}: received a ping".format(file_port)
+            #print "FS {}: received a ping".format(file_port)
             if(file_server.primary_copy==True):
                 string_server_list=parse_tuple_server_list(file_server.server_list)
                 self.request.send(string_server_list)
@@ -130,13 +131,13 @@ if __name__ == "__main__":
     #print(serverIP)
     #print(serverPort)
     file_server.server_alive=True
-
+    current_min=datetime.now().minute
     try:
         server_thread = threading.Thread(target=file_server.serve_forever)
         server_thread.daemon = True
         server_thread.start()
 
-        while(file_server.server_alive==True):
+        while(file_server.server_alive==True and current_min> datetime.now().minute-3):
             #print datetime.now().second            #if replica then ping_primary
             if():#file_server.primary_copy==False and datetime.now().second==file_server.ping_interval && 4==5):
                 print "FS {}  Pinged!".format(file_port)
